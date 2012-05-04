@@ -10,10 +10,6 @@ module NagiosCheck
       raise NotImplementedError.new('You must override this method with your own check.')
     end
 
-    def format(status)
-      return "#{@name.upcase} #{status.name.upcase}: #{status.message}"
-    end
-
     def run
       begin
         status = self.check
@@ -21,7 +17,7 @@ module NagiosCheck
         status = Status::Unknown(e.message)
       end
 
-      puts self.format(status)
+      puts "#{@name.upcase} #{status}"
       exit status.code
     end
   end

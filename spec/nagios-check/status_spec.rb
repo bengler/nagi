@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe NagiosCheck::Status::Status do
-  before(:all) do
+  before(:each) do
     @status = NagiosCheck::Status::Status.new(0, 'name', 'message')
   end
 
@@ -35,10 +35,16 @@ describe NagiosCheck::Status::Status do
       lambda { @status.name = 'test' }.should raise_error NoMethodError
     end
   end
+
+  describe '.to_s' do
+    it 'formats the status' do
+      @status.to_s.should eq 'NAME: message'
+    end
+  end
 end
 
 describe NagiosCheck::Status::Critical do
-  before(:all) do
+  before(:each) do
     @status = NagiosCheck::Status::Critical.new('message')
   end
 
@@ -62,7 +68,7 @@ describe NagiosCheck::Status::Critical do
 end
 
 describe NagiosCheck::Status::OK do
-  before(:all) do
+  before(:each) do
     @status = NagiosCheck::Status::OK.new('message')
   end
 
@@ -86,7 +92,7 @@ describe NagiosCheck::Status::OK do
 end
 
 describe NagiosCheck::Status::Unknown do
-  before(:all) do
+  before(:each) do
     @status = NagiosCheck::Status::Unknown.new('message')
   end
 
@@ -110,7 +116,7 @@ describe NagiosCheck::Status::Unknown do
 end
 
 describe NagiosCheck::Status::Warning do
-  before(:all) do
+  before(:each) do
     @status = NagiosCheck::Status::Warning.new('message')
   end
 

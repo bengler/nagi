@@ -9,6 +9,10 @@ module NagiosCheck
         @name = name
         @message = message
       end
+
+      def to_s
+        return "#{@name.upcase}: #{@message}"
+      end
     end
 
     class Critical < Status

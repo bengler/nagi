@@ -11,14 +11,6 @@ describe NagiosCheck::Check do
     end
   end
 
-  describe '.format' do
-    it 'formats a Status' do
-      @check.format(
-        NagiosCheck::Status::Warning.new('message')
-      ).should eq 'NAME WARNING: message'
-    end
-  end
-
   describe '.name' do
     it 'contains name' do
       @check.name.should eq 'name'
