@@ -12,12 +12,7 @@ module NagiosCheck
 
     def execute(command)
       output, status = Open3.capture2e(command)
-      puts status.exitstatus
-
-      if status.exitstatus != 0
-        raise "Command failed: #{command}".strip
-      end
-
+      raise "Command failed: #{command}".strip if status.exitstatus != 0
       return output.strip
     end
 
