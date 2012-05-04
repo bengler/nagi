@@ -10,6 +10,17 @@ module NagiosCheck
       raise NotImplementedError.new('You must override this method with your own check.')
     end
 
+    def execute(command)
+      output, status = Open3.capture2e(command)
+      puts status.exitstatus
+
+      if status.exitstatus != 0
+        raise "Command failed: #{command}".strip
+      end
+
+      return output.strip
+    end
+
     def run
       begin
         status = self.check
