@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe NagiosCheck::Check do
-  before(:all) do
+  before(:each) do
     @check = NagiosCheck::Check.new('name')
   end
 
@@ -28,6 +28,28 @@ describe NagiosCheck::Check do
   describe '.name' do
     it 'contains name' do
       @check.name.should eq 'name'
+    end
+  end
+
+  describe '.run' do
+    it 'returns check status' do
+      class << @check
+        def check
+          return $s = NagiosCheck::OK.new('message')
+        end
+      end
+      @check.run.should equal $s
+    end
+
+    it 'returns Unknown on exception' do
+      class << @check
+        def check
+          raise 'Fail'
+        end
+      end
+      status = @check.run
+      status.class.should eq NagiosCheck::Unknown
+      status.message.should eq 'Fail'
     end
   end
 end

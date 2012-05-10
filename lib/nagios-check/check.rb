@@ -12,7 +12,7 @@ module NagiosCheck
 
     def execute(command)
       output, status = Open3.capture2e(command)
-      raise "Command failed: #{command}".strip if status.exitstatus != 0
+      raise "Command failed: #{output}".strip if status.exitstatus != 0
       return output.strip
     end
 
@@ -20,10 +20,14 @@ module NagiosCheck
       begin
         status = self.check
       rescue Exception => e
-        status = Status::Unknown(e.message)
+        status = Unknown.new(e.message)
       end
+      return status
+    end
 
-      puts "#{@name.upcase} #{status}"
+    def run!
+      status = self.run
+      puts status
       exit status.code
     end
   end
