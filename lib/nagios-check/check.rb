@@ -27,7 +27,6 @@ module NagiosCheck
 
     def run!
       status = self.run
-      puts status
       exit status.code
     end
   end
