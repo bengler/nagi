@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe NagiosCheck::Check do
   before(:each) do
-    @check = NagiosCheck::Check.new('name')
+    @check = NagiosCheck::Check.new('name', '0.1')
   end
 
   describe '.check' do
@@ -63,6 +63,12 @@ describe NagiosCheck::Check do
       end
       status = @check.run
       status.class.should eq NagiosCheck::Unknown
+    end
+  end
+
+  describe '.version' do
+    it 'contains version' do
+      @check.version.should eq '0.1'
     end
   end
 end

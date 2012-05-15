@@ -1,9 +1,10 @@
 module NagiosCheck
   class Check
-    attr_accessor :name
+    attr_accessor :name, :version
 
-    def initialize(name)
+    def initialize(name, version)
       @name = name
+      @version = version
     end
 
     def check
