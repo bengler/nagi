@@ -19,6 +19,7 @@ module NagiosCheck
     def run
       begin
         status = self.check
+        raise 'Check did not return a status' unless status.is_a? NagiosCheck::Status
       rescue Exception => e
         status = Unknown.new(e.message)
       end

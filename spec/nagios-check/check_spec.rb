@@ -54,5 +54,15 @@ describe NagiosCheck::Check do
       status.class.should eq NagiosCheck::Unknown
       status.message.should eq 'Fail'
     end
+
+    it 'returns Unknown if check doesn\'t return a Status' do
+      class << @check
+        def check
+          return "ok"
+        end
+      end
+      status = @check.run
+      status.class.should eq NagiosCheck::Unknown
+    end
   end
 end
