@@ -16,6 +16,9 @@ describe NagiosCheck::Check do
       lambda { @check.execute('exit 1') }.should raise_error Exception
     end
 
+    it 'raises exception on non-zero status in pipelines' do
+      lambda { @check.execute('false | true') }.should raise_error Exception
+    end
     it 'returns command stdout' do
       @check.execute('echo test').should eq 'test'
     end
