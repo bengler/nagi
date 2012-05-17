@@ -1,3 +1,3 @@
-module NagiosCheck
+module Nagi
   VERSION = '0.0.1'
 end

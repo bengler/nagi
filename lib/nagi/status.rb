@@ -1,4 +1,4 @@
-module NagiosCheck
+module Nagi
   class Status
     attr_accessor :message
     attr_reader :code, :name

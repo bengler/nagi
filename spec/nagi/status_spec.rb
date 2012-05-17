@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe NagiosCheck::Status do
+describe Nagi::Status do
   before(:each) do
-    @status = NagiosCheck::Status.new(0, 'name', 'message')
+    @status = Nagi::Status.new(0, 'name', 'message')
   end
 
   describe '.code' do
@@ -43,9 +43,9 @@ describe NagiosCheck::Status do
   end
 end
 
-describe NagiosCheck::Critical do
+describe Nagi::Critical do
   before(:each) do
-    @status = NagiosCheck::Critical.new('message')
+    @status = Nagi::Critical.new('message')
   end
 
   describe '.code' do
@@ -67,9 +67,9 @@ describe NagiosCheck::Critical do
   end
 end
 
-describe NagiosCheck::OK do
+describe Nagi::OK do
   before(:each) do
-    @status = NagiosCheck::OK.new('message')
+    @status = Nagi::OK.new('message')
   end
 
   describe '.code' do
@@ -91,9 +91,9 @@ describe NagiosCheck::OK do
   end
 end
 
-describe NagiosCheck::Unknown do
+describe Nagi::Unknown do
   before(:each) do
-    @status = NagiosCheck::Unknown.new('message')
+    @status = Nagi::Unknown.new('message')
   end
 
   describe '.code' do
@@ -115,9 +115,9 @@ describe NagiosCheck::Unknown do
   end
 end
 
-describe NagiosCheck::Warning do
+describe Nagi::Warning do
   before(:each) do
-    @status = NagiosCheck::Warning.new('message')
+    @status = Nagi::Warning.new('message')
   end
 
   describe '.code' do

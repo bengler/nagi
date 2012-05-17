@@ -1,4 +1,4 @@
-module NagiosCheck
+module Nagi
   class Check
     attr_accessor :name, :version
 
@@ -34,7 +34,7 @@ module NagiosCheck
       @optionparser.parse!(args)
       begin
         status = self.check(*args)
-        raise 'Check did not return a status' unless status.is_a? NagiosCheck::Status
+        raise 'Check did not return a status' unless status.is_a? Nagi::Status
       rescue ArgumentError
         puts "Error: required arguments not given"
         puts

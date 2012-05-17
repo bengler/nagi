@@ -1,3 +1,3 @@
-# nagios-check
+# Nagi
 
-A framework for writing Nagios checks.
+A framework for writing Nagios plugins.
