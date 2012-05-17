@@ -7,6 +7,12 @@ module Nagi
       instance_eval &block
     end
 
+    def argument(name)
+      @plugin.optionparser.on_arg(name) do |value|
+        @plugin.options[name] = value
+      end
+    end
+
     def check(&block)
       @plugin.check = block
     end
@@ -21,6 +27,12 @@ module Nagi
 
     def ok(message)
       throw :status, Nagi::Status::OK.new(message)
+    end
+
+    def switch(name, *args)
+      @plugin.optionparser.on(*args) do |value|
+        @plugin.options[name] = value or true
+      end
     end
 
     def unknown(message)
