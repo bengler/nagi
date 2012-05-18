@@ -1,3 +1,5 @@
+require 'spec_helper'
+
 describe 'Nagi::Utility::execute' do
   it 'raises exception on non-zero status' do
     lambda { Nagi::Utility.execute('exit 1') }.should raise_error StandardError
