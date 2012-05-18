@@ -4,6 +4,8 @@ A Ruby DSL for writing Nagios plugins. It handles the tedium of argument
 parsing, exit statuses, output formatting and such, and lets you focus on
 writing the actual check.
 
+Written by Erik Grinaker <erik@bengler.no>, and licensed under the GNU GPL v3.
+
 ## Example
 
 A typical plugin looks like this:
@@ -84,3 +86,18 @@ or the block raises an unhandled exception, an Unknown status will be returned.
   stdout and stderr). If the command exits with a non-zero status, it will
   throw an exception. The shell is set to use the `pipefail` option, so non-zero
   exit statuses in pipelines are detected as well.
+
+## License
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
