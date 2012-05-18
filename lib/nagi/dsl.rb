@@ -12,11 +12,9 @@ module Nagi
     end
 
     def check(&block)
-      @plugin.check = lambda do |options|
-        status = catch(:status) do
-          block.call(options)
-        end
-        return status
+      p = class << @plugin; self; end
+      p.send(:define_method, :check) do |options|
+        return catch(:status) { block.call(options) }
       end
     end
 
