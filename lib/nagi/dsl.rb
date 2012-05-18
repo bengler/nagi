@@ -8,9 +8,7 @@ module Nagi
     end
 
     def argument(name)
-      @plugin.optionparser.on_arg(name) do |value|
-        @plugin.options[name] = value
-      end
+      @plugin.options.argument(name)
     end
 
     def check(&block)
@@ -27,17 +25,19 @@ module Nagi
     end
 
     def name(name)
-      @plugin.name = name
+      @plugin.options.name = name
     end
 
     def ok(message)
       throw :status, Nagi::Status::OK.new(message)
     end
 
+    def prefix(prefix)
+      @plugin.prefix = prefix
+    end
+
     def switch(name, *args)
-      @plugin.optionparser.on(*args) do |value|
-        @plugin.options[name] = value or true
-      end
+      @plugin.options.switch(name, *args)
     end
 
     def unknown(message)
@@ -45,7 +45,7 @@ module Nagi
     end
 
     def version(version)
-      @plugin.version = version
+      @plugin.options.version = version
     end
 
     def warning(message)
