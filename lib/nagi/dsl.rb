@@ -25,7 +25,7 @@ module Nagi
     end
 
     def execute(command)
-      return Nagi::Utility::execute(command)
+      return Nagi::Utility.execute(command)
     end
 
     def name(name)
