@@ -4,7 +4,8 @@ A Ruby DSL for writing Nagios plugins. It handles the tedium of argument
 parsing, exit statuses, output formatting and such, and lets you focus on
 writing the actual check.
 
-Written by Erik Grinaker <erik@bengler.no>, and licensed under the GNU GPL v3.
+Written by Erik Grinaker &lt;erik@bengler.no&gt;, and licensed under the
+GNU GPL v3.
 
 ## Example
 
