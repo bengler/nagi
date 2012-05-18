@@ -2,7 +2,7 @@ require 'open3'
 require 'optparse'
 
 require 'nagi/dsl'
-require 'nagi/options'
+require 'nagi/optionparser'
 require 'nagi/plugin'
 require 'nagi/status'
 require 'nagi/utility'

@@ -1,24 +1,24 @@
 module Nagi
   class Plugin
-    attr_accessor :check, :name, :options, :prefix, :version
+    attr_accessor :check, :name, :optionparser, :prefix, :version
 
     def initialize
-      @options = Nagi::Options.new
+      @optionparser = Nagi::OptionParser.new
     end
 
     def name=(value)
       @name = value
-      @options.name = value
+      @optionparser.program_name = value
     end
 
     def run(args)
       begin
-        status = @check.call(@options.parse(args))
+        status = @check.call(@optionparser.parse(args))
         raise 'Check did not provide a status' unless status.is_a? Nagi::Status::Status
       rescue ArgumentError => e
         STDERR.puts("Error: #{e.message}")
         puts ""
-        puts @options
+        puts @optionparser
         exit 4
       rescue StandardError => e
         status = Nagi::Status::Unknown.new(e.message)
@@ -34,7 +34,7 @@ module Nagi
 
     def version=(value)
       @version = value
-      @options.version = value
+      @optionparser.version = value
     end
   end
 end
