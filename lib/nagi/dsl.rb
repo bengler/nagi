@@ -14,7 +14,12 @@ module Nagi
     end
 
     def check(&block)
-      @plugin.check = block
+      @plugin.check = lambda do |options|
+        status = catch(:status) do
+          block.call(options)
+        end
+        return status
+      end
     end
 
     def critical(message)

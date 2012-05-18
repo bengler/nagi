@@ -22,9 +22,7 @@ module Nagi
     def run(args)
       begin
         @optionparser.parse!(args)
-        status = catch(:status) do
-          @check.call(@options)
-        end
+        status = @check.call(@options)
         raise 'Check did not provide a status' unless status.is_a? Nagi::Status::Status
       rescue ArgumentError => e
         STDERR.puts("Error: #{e.message}")
