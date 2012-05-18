@@ -32,7 +32,7 @@ Nagi do
     end
 
     if args[:ip] and ip != args[:ip]
-      critical "#{args[:hostname]} resolves to #{ip}, expected #{args[:ip]}
+      critical "#{args[:hostname]} resolves to #{ip}, expected #{args[:ip]}"
     else
       ok "#{args[:hostname]} resolves to #{ip}"
     end
