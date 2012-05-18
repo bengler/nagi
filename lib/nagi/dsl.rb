@@ -24,6 +24,10 @@ module Nagi
       throw :status, Nagi::Status::Critical.new(message)
     end
 
+    def execute(command)
+      return Nagi::Utility::execute(command)
+    end
+
     def name(name)
       @plugin.options.name = name
     end

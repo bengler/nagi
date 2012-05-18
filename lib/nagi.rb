@@ -5,6 +5,7 @@ require 'nagi/dsl'
 require 'nagi/options'
 require 'nagi/plugin'
 require 'nagi/status'
+require 'nagi/utility'
 require 'nagi/version'
 
 module Nagi
