@@ -9,8 +9,8 @@ Gem::Specification.new do |s|
   s.authors       = ['Erik Grinaker']
   s.email         = ['erik@bengler.no']
   s.homepage      = 'http://github.com/bengler/nagi'
-  s.summary       = 'A framework for writing Nagios plugins'
-  s.description   = 'A framework for writing Nagios plugins'
+  s.summary       = 'A DSL for writing Nagios plugins'
+  s.description   = 'A DSL for writing Nagios plugins'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
