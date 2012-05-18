@@ -15,7 +15,7 @@ A typical plugin looks like this:
 #!/usr/bin/env ruby
 
 require 'nagi'
-require Resolv
+require 'resolv'
 
 Nagi do
   name 'check_dns'
