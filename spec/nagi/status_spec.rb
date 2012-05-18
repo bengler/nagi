@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe Nagi::Status do
+describe Nagi::Status::Status do
   before(:each) do
-    @status = Nagi::Status.new(0, 'name', 'message')
+    @status = Nagi::Status::Status.new(0, 'name', 'message')
   end
 
   describe '.code' do
@@ -43,9 +43,9 @@ describe Nagi::Status do
   end
 end
 
-describe Nagi::Critical do
+describe Nagi::Status::Critical do
   before(:each) do
-    @status = Nagi::Critical.new('message')
+    @status = Nagi::Status::Critical.new('message')
   end
 
   describe '.code' do
@@ -67,9 +67,9 @@ describe Nagi::Critical do
   end
 end
 
-describe Nagi::OK do
+describe Nagi::Status::OK do
   before(:each) do
-    @status = Nagi::OK.new('message')
+    @status = Nagi::Status::OK.new('message')
   end
 
   describe '.code' do
@@ -91,9 +91,9 @@ describe Nagi::OK do
   end
 end
 
-describe Nagi::Unknown do
+describe Nagi::Status::Unknown do
   before(:each) do
-    @status = Nagi::Unknown.new('message')
+    @status = Nagi::Status::Unknown.new('message')
   end
 
   describe '.code' do
@@ -115,9 +115,9 @@ describe Nagi::Unknown do
   end
 end
 
-describe Nagi::Warning do
+describe Nagi::Status::Warning do
   before(:each) do
-    @status = Nagi::Warning.new('message')
+    @status = Nagi::Status::Warning.new('message')
   end
 
   describe '.code' do
