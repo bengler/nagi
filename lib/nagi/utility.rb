@@ -3,6 +3,8 @@ module Nagi
     module_function
 
     def execute(command)
+      command = command.gsub(/'/, "\'")
+      puts command
       if defined?(Open3.capture2)
         output, status = Open3.capture2e("/bin/bash -o pipefail -c '#{command}'")
       else
