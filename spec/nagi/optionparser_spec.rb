@@ -73,7 +73,7 @@ describe Nagi::OptionParser do
 
   describe '.switch' do
     it 'adds a switch' do
-      @parser.switch('name', '-t', '--test TEST',) do |value|
+      @parser.switch('name', '-t', '--test TEST') do |value|
       end
 
       @parser.top.list[-1].short[0].should eq '-t'
