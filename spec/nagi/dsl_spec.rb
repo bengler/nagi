@@ -96,12 +96,21 @@ describe Nagi::DSL do
     it 'throws :status with critical status' do
       catch(:status) do
         @dsl.critical('message')
+        nil
       end.class.should eq Nagi::Status::Critical
     end
 
     it 'returns status if collection is enabled' do
       @dsl.collect(:all)
       @dsl.critical('message').class.should eq Nagi::Status::Critical
+    end
+
+    it 'throws :status when collection is enabled if forced' do
+      @dsl.collect(:all)
+      catch(:status) do
+        @dsl.critical('message', true)
+        nil
+      end.class.should eq Nagi::Status::Critical
     end
   end
 
@@ -122,12 +131,21 @@ describe Nagi::DSL do
     it 'throws :status with ok status' do
       catch(:status) do
         @dsl.ok('message')
+        nil
       end.class.should eq Nagi::Status::OK
     end
 
     it 'returns status if collection is enabled' do
       @dsl.collect(:all)
       @dsl.ok('message').class.should eq Nagi::Status::OK
+    end
+
+    it 'throws :status when collection is enabled if forced' do
+      @dsl.collect(:all)
+      catch(:status) do
+        @dsl.ok('message', true)
+        nil
+      end.class.should eq Nagi::Status::OK
     end
   end
 
@@ -150,12 +168,21 @@ describe Nagi::DSL do
     it 'throws :status with unknown status' do
       catch(:status) do
         @dsl.unknown('message')
+        nil
       end.class.should eq Nagi::Status::Unknown
     end
 
     it 'returns status if collection is enabled' do
       @dsl.collect(:all)
       @dsl.unknown('message').class.should eq Nagi::Status::Unknown
+    end
+
+    it 'throws :status when collection is enabled if forced' do
+      @dsl.collect(:all)
+      catch(:status) do
+        @dsl.unknown('message', true)
+        nil
+      end.class.should eq Nagi::Status::Unknown
     end
   end
 
@@ -170,12 +197,21 @@ describe Nagi::DSL do
     it 'throws :status with warning status' do
       catch(:status) do
         @dsl.warning('message')
+        nil
       end.class.should eq Nagi::Status::Warning
     end
 
     it 'returns status if collection is enabled' do
       @dsl.collect(:all)
       @dsl.warning('message').class.should eq Nagi::Status::Warning
+    end
+
+    it 'throws :status when collection is enabled if forced' do
+      @dsl.collect(:all)
+      catch(:status) do
+        @dsl.warning('message', true)
+        nil
+      end.class.should eq Nagi::Status::Warning
     end
   end
 end

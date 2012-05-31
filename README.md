@@ -121,6 +121,10 @@ is given. It can be set to either `:severe`, in which case the most severe
 status will be returned at the end, or `:all` which will use the most severe
 status code but also combine all status messages into one.
 
+However, one can still force a status to return from the check, and ignore
+the collected statues, by setting the second parameter (`force`) to `true`
+for the status methods.
+
 This example checks used space on all disk drives, and returns critical if
 any of the drives are above a threshold:
 
@@ -136,7 +140,12 @@ Nagi do
   collect :all
 
   check do |args|
-    execute('df').lines.each do |line|
+		begin
+			output = execute('df')
+		rescue StandardError => e
+			critical "df failed: #{e.message}", true
+		end
+    output.lines.each do |line|
       if line =~ /^.*?(\d+)%\s*(.*)$/
         if $1.to_i > args[:percentage].to_i
           critical "#{$2} #{$1}% used"
@@ -193,14 +202,16 @@ parsed command-line arguments as a hash. It should use one of the methods `ok`,
 or the block raises an unhandled exception, an Unknown status will be returned.
 
 The `collect` setting (see above) can be used to collect statuses and continue
-the check, rather than returning the first status encountered.
+the check, rather than returning the first status encountered. However, if
+`true` is passed as the second parameter of the status method, it will
+return the status regardless of the `collect` setting.
 
 * `check` *block*: the code block the the check. Parsed command-line arguments
   are passed as a hash.
-* `ok` *message*: returns an OK status.
-* `warning` *message*: returns a Warning status.
-* `critical` *message*: returns a Critical status.
-* `unknown` *message*: returns an Unknown status.
+* `ok` *message*, *force=false*: returns an OK status.
+* `warning` *message*, *force=false*: returns a Warning status.
+* `critical` *message*, *force=false*: returns a Critical status.
+* `unknown` *message*, *force=false*: returns an Unknown status.
 * `execute` *command*: executes a shell command, and returns any output (both
   stdout and stderr). If the command exits with a non-zero status, it will
   throw an exception. The shell is set to use the `pipefail` option, so non-zero

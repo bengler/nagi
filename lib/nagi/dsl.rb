@@ -39,9 +39,9 @@ module Nagi
       @collect = type
     end
 
-    def critical(message)
+    def critical(message, force=false)
       status = Nagi::Status::Critical.new(message)
-      throw :status, status unless @collect
+      throw :status, status if force or not @collect
       @collected.push(status)
       return status
     end
@@ -54,9 +54,9 @@ module Nagi
       @plugin.name = name
     end
 
-    def ok(message)
+    def ok(message, force=false)
       status = Nagi::Status::OK.new(message)
-      throw :status, status unless @collect
+      throw :status, status if force or not @collect
       @collected.push(status)
       return status
     end
@@ -69,9 +69,9 @@ module Nagi
       @plugin.optionparser.switch(name, *args)
     end
 
-    def unknown(message)
+    def unknown(message, force=false)
       status = Nagi::Status::Unknown.new(message)
-      throw :status, status unless @collect
+      throw :status, status if force or not @collect
       @collected.push(status)
       return status
     end
@@ -80,9 +80,9 @@ module Nagi
       @plugin.version = version
     end
 
-    def warning(message)
+    def warning(message, force=false)
       status = Nagi::Status::Warning.new(message)
-      throw :status, status unless @collect
+      throw :status, status if force or not @collect
       @collected.push(status)
       return status
     end
