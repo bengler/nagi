@@ -1,3 +1,6 @@
+0.2.2: xxxx-xx-xx
+- Fixed quote escaping in Utility::execute(). Again.
+
 0.2.1: 2012-05-31
 - Added force parameter for DSL status methods
 

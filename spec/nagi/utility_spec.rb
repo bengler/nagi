@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe 'Nagi::Utility::execute' do
   it 'handles special characters correctly' do
-    Nagi::Utility.execute("echo 'x'").should eq 'x'
-    Nagi::Utility.execute('echo "y"').should eq 'y'
+    Nagi::Utility.execute("echo 'x y z'").should eq 'x y z'
+    Nagi::Utility.execute('echo "x y z"').should eq 'x y z'
   end
 
   it 'raises exception on non-zero status' do

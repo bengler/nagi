@@ -3,11 +3,11 @@ module Nagi
     module_function
 
     def execute(command)
-      command = command.gsub(/'/, "\'")
+      command = command.gsub(/"/, '\\"')
       if defined?(Open3.capture2)
-        output, status = Open3.capture2e("/bin/bash -o pipefail -c '#{command}'")
+        output, status = Open3.capture2e("/bin/bash -o pipefail -c \"#{command}\"")
       else
-        IO.popen("/bin/bash -o pipefail -c '#{command}' 2>&1") do |io|
+        IO.popen("/bin/bash -o pipefail -c \"#{command}\" 2>&1") do |io|
           output = io.read
         end
         status = $?
