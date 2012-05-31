@@ -1,5 +1,5 @@
-0.2.0: xxxx-xx-xx
-- Added support for collecting statuses during check
+0.2.0: 2012-05-31
+- Added support for collecting multiple statuses during check
 
 0.1.1: 2012-05-30
 - Made Utility::execute() work with Ruby 1.8
