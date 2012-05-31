@@ -5,6 +5,22 @@ describe Nagi::Status::Status do
     @status = Nagi::Status::Status.new(0, 'name', 'message')
   end
 
+  describe '<=>' do
+    it 'compares status code' do
+      (@status <=> Nagi::Status::Status.new(1, 'n', 'm')).should eq -1
+      (@status <=> Nagi::Status::Status.new(0, 'n', 'm')).should eq 0
+      (@status <=> Nagi::Status::Status.new(-1, 'n', 'm')).should eq 1
+    end
+
+    it 'compares Unknown (3) as less severe than Ok (0)' do
+      (@status <=> Nagi::Status::Status.new(3, 'n', 'm')).should eq 1
+    end
+
+    it 'raises ArgumentError if compared with non-Status object' do
+      lambda { @status <=> 1 }.should raise_error ArgumentError
+    end
+  end
+
   describe '.code' do
     it 'contains status code' do
       @status.code.should eq 0

@@ -1,8 +1,20 @@
 module Nagi
   module Status
     class Status
+      include Comparable
       attr_accessor :message
       attr_reader :code, :name
+
+      def <=>(other)
+        if not other.is_a? Nagi::Status::Status
+          raise ArgumentError.new("comparison of Nagi::Status::Status with #{other.class} failed.")
+        end
+
+        # Make Unknown the least severe status
+        c = @code >= 3 ? -1 : @code
+        o = other.code >= 3 ? -1 : other.code
+        return c <=> o
+      end
 
       def initialize(code, name, message)
         @code = code
