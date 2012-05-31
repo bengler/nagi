@@ -9,7 +9,48 @@ GNU GPL v3.
 
 ## Example
 
-A typical plugin looks like this:
+A very simple plugin looks like this:
+
+```ruby
+#!/usr/bin/env ruby
+
+require 'nagi'
+
+Nagi do
+  name 'check_true'
+  version '0.1'
+  prefix 'TRUE'
+
+  check do |args|
+    if true
+      ok 'True is still true'
+    else
+      critical 'Uh oh'
+    end
+  end
+end
+```
+
+The first few methods just set some basic info for the plugin - the name,
+version, and a prefix for the check output. These are all optional.
+
+Next, the check block is defined, which runs the actual Nagios check. `args`
+will contains any options (see command-line parsing below), and the methods ok,
+warning, critical, and unknown are used to return the check status. A missing
+status or uncaught exception will result in an 'unknown' status.
+
+The plugin is run as any regular script - save it as a file, make it executable
+and run it:
+
+```bash
+$ ./test.rb 
+TRUE OK: True is still true
+```
+
+### Command-line options
+
+Nagi can automatically parse command-line arguments when requested, and provide
+them as input to the check block. Here is a simple example:
 
 ```ruby
 #!/usr/bin/env ruby
@@ -40,23 +81,100 @@ Nagi do
 end
 ```
 
-Here we first set up some basic info like name and version, and specify a few
-command-line options. Then we write a block of code containing the actual
-check, which is given the parsed command-line options as a hash, and returns a
-status via methods like `ok` and `critical`.
+The `argument` method specifies a required positional argument, and only takes
+the name of the argument. `switch` specifies an optional switch, which may or
+may not take an argument of its own. The first `switch` parameter is its name,
+while the rest are passed to the standard Ruby OptionParser.on method - see its
+documentation for details.
 
-To run the plugin, type `./check_dns.rb --ip 127.0.0.1 localhost`, or try
-`./check_dns.rb --help` for more info.
+The parsed arguments are passed to the `check` block via the `args` parameter,
+which is a hash containing argument names and values. In the case of a switch
+with no argument of its own, the value will be `true`.
+
+A few usage examples of this plugin:
+
+```bash
+$ ./check_dns.rb 
+Error: Argument 'hostname' not given
+
+Usage: ./check_dns.rb [options] <hostname>
+    -i, --ip IP                      Expected IP address
+    -h, --help                       Display this help message
+    -V, --version                    Display version information
+
+$ ./check_dns.rb www.google.com
+DNS OK: www.google.com resolves to 173.194.35.148
+
+$ ./check_dns.rb -i 1.2.3.4 www.google.com
+DNS CRITICAL: www.google.com resolves to 173.194.35.148, expected 1.2.3.4
+```
+
+Nagi will automatically set up the -h/--help and -V/--version switches and
+handle them appropriately.
+
+### Handling multiple statuses
+
+In some cases it is useful to collect several statuses and return the most
+severe, rather than returning the first status encountered. This is typically
+used when monitoring multiple resources with a single check.
+
+The `collect` setting tells Nagi to continue running the check when a status
+is given. It can be set to either `:severe`, in which case the most severe
+status will be returned at the end, or `:all` which will use the most severe
+status code but also combine all status messages into one.
+
+This example checks used space on all disk drives, and returns critical if
+any of the drives are above a threshold:
+
+```ruby
+#!/usr/bin/env ruby
+
+require 'nagi'
+
+Nagi do
+  name 'check_df'
+  version '0.1'
+  prefix 'DF'
+  argument :percentage
+  collect :all
+
+  check do |args|
+    execute('df').lines.each do |line|
+      if line =~ /^.*?(\d+)%\s*(.*)$/
+        if $1.to_i > args[:percentage].to_i
+          critical "#{$2} #{$1}% used"
+        else
+          ok "#{$2} #{$1}% used"
+        end
+      end
+    end
+  end
+end
+```
+
+When run, it will output something like this:
+
+```bash
+$ ./check_df.rb 90
+DF OK: / 80% used, /Volumes/Media 57% used
+
+$ ./check_df.rb 70
+DF CRITICAL: / 80% used, /Volumes/Media 57% used
+```
 
 ## Reference
 
-### Metadata
+### Plugin info
 
 These describe the program, and are usually given first, if necessary.
 
 * `name` *name*: the program name.
 * `version` *version*: the program version.
 * `prefix` *prefix*: a prefix for the check output.
+* `collect` *type*: collect statuses and continue the check, rather than
+  returning. *type* can be either `:severe` or `:all` - `:severe` will
+  return the last, most severe status, and `:all` will use the most severe
+  status but join all the status messages together into one.
 
 ### Command-line arguments
 
@@ -76,6 +194,9 @@ The check is given as a code block to the `check` method, and is passed the
 parsed command-line arguments as a hash. It should use one of the methods `ok`,
 `warning`, `critical`, or `unknown` to return a status. If no status is given,
 or the block raises an unhandled exception, an Unknown status will be returned.
+
+The `collect` setting (see above) can be used to collect statuses and continue
+the check, rather than returning the first status encountered.
 
 * `check` *block*: the code block the the check. Parsed command-line arguments
   are passed as a hash.
