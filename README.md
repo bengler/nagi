@@ -13,7 +13,6 @@ A very simple plugin looks like this:
 
 ```ruby
 #!/usr/bin/env ruby
-
 require 'nagi'
 
 Nagi do
@@ -42,7 +41,7 @@ status or uncaught exception will result in an 'unknown' status.
 The plugin is run as any regular script - save it as a file, make it executable
 and run it:
 
-```bash
+```
 $ ./test.rb 
 TRUE OK: True is still true
 ```
@@ -54,7 +53,6 @@ them as input to the check block. Here is a simple example:
 
 ```ruby
 #!/usr/bin/env ruby
-
 require 'nagi'
 require 'resolv'
 
@@ -93,7 +91,7 @@ with no argument of its own, the value will be `true`.
 
 A few usage examples of this plugin:
 
-```bash
+```
 $ ./check_dns.rb 
 Error: Argument 'hostname' not given
 
@@ -128,7 +126,6 @@ any of the drives are above a threshold:
 
 ```ruby
 #!/usr/bin/env ruby
-
 require 'nagi'
 
 Nagi do
@@ -154,7 +151,7 @@ end
 
 When run, it will output something like this:
 
-```bash
+```
 $ ./check_df.rb 90
 DF OK: / 80% used, /Volumes/Media 57% used
 
