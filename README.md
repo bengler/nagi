@@ -140,11 +140,11 @@ Nagi do
   collect :all
 
   check do |args|
-		begin
-			output = execute('df')
-		rescue StandardError => e
-			critical "df failed: #{e.message}", true
-		end
+    begin
+      output = execute('df')
+    rescue StandardError => e
+      critical "df failed: #{e.message}", true
+    end
     output.lines.each do |line|
       if line =~ /^.*?(\d+)%\s*(.*)$/
         if $1.to_i > args[:percentage].to_i
