@@ -38,6 +38,58 @@ describe Nagi::DSL do
       end
       @dsl.plugin.check({}).should eq 'status'
     end
+
+    it 'catches throwns :status and returns payload, even when collect is set' do
+      @dsl.collect(:all)
+      @dsl.check do |options|
+        throw :status, 'status'
+      end
+      @dsl.plugin.check({}).should eq 'status'
+    end
+
+    it 'returns first, most severe status for collect :severe' do
+      @dsl.collect(:severe)
+      @dsl.check do |o|
+        @dsl.warning 'w1'
+        @dsl.critical 'c1'
+        @dsl.ok 'o1'
+        @dsl.critical 'c2'
+        @dsl.ok 'o2'
+      end
+
+      status = @dsl.plugin.check({})
+      status.class.should eq Nagi::Status::Critical
+      status.message.should eq 'c2'
+    end
+
+    it 'returns most severe status with all messages joined for collect :all' do
+      @dsl.collect(:all)
+      @dsl.check do |o|
+        @dsl.warning 'w1'
+        @dsl.critical 'c1'
+        @dsl.ok 'o1'
+        @dsl.critical 'c2'
+        @dsl.ok 'o2'
+      end
+
+      status = @dsl.plugin.check({})
+      status.class.should eq Nagi::Status::Critical
+      status.message.should eq 'w1, c1, o1, c2, o2'
+    end
+  end
+
+  describe '.collect' do
+    it 'accepts :all' do
+      @dsl.collect(:all)
+    end
+
+    it 'accepts :severe' do
+      @dsl.collect(:severe)
+    end
+
+    it 'raises exception on other value' do
+      lambda { @dsl.collect(:dummy) }.should raise_error
+    end
   end
 
   describe '.critical' do
@@ -45,6 +97,11 @@ describe Nagi::DSL do
       catch(:status) do
         @dsl.critical('message')
       end.class.should eq Nagi::Status::Critical
+    end
+
+    it 'returns status if collection is enabled' do
+      @dsl.collect(:all)
+      @dsl.critical('message').class.should eq Nagi::Status::Critical
     end
   end
 
@@ -66,6 +123,11 @@ describe Nagi::DSL do
       catch(:status) do
         @dsl.ok('message')
       end.class.should eq Nagi::Status::OK
+    end
+
+    it 'returns status if collection is enabled' do
+      @dsl.collect(:all)
+      @dsl.ok('message').class.should eq Nagi::Status::OK
     end
   end
 
@@ -90,6 +152,11 @@ describe Nagi::DSL do
         @dsl.unknown('message')
       end.class.should eq Nagi::Status::Unknown
     end
+
+    it 'returns status if collection is enabled' do
+      @dsl.collect(:all)
+      @dsl.unknown('message').class.should eq Nagi::Status::Unknown
+    end
   end
 
   describe '.version' do
@@ -104,6 +171,11 @@ describe Nagi::DSL do
       catch(:status) do
         @dsl.warning('message')
       end.class.should eq Nagi::Status::Warning
+    end
+
+    it 'returns status if collection is enabled' do
+      @dsl.collect(:all)
+      @dsl.warning('message').class.should eq Nagi::Status::Warning
     end
   end
 end

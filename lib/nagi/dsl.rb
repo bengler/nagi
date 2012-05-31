@@ -4,6 +4,8 @@ module Nagi
 
     def initialize(&block)
       @plugin = Nagi::Plugin.new
+      @collect = nil
+      @collected = []
       instance_eval &block
     end
 
@@ -12,14 +14,36 @@ module Nagi
     end
 
     def check(&block)
+      # make data available to block
+      collect = @collect
+      collected = @collected
+
       p = class << @plugin; self; end
       p.send(:define_method, :check) do |options|
-        return catch(:status) { block.call(options) }
+        status = catch(:status) {
+          block.call(options)
+          nil # to avoid returning status if not thrown
+        }
+        return status if status or not collect
+        return nil if collected.empty?
+        return collected.reverse.max if collect == :severe
+        return collected.reverse.max.class.new(
+          collected.map { |s| s.message }.join(', ')
+        ) if collect == :all
+        return nil
       end
     end
 
+    def collect(type)
+      raise "Invalid collect type #{type.to_s}" unless [:all, :severe].include?(type)
+      @collect = type
+    end
+
     def critical(message)
-      throw :status, Nagi::Status::Critical.new(message)
+      status = Nagi::Status::Critical.new(message)
+      throw :status, status unless @collect
+      @collected.push(status)
+      return status
     end
 
     def execute(command)
@@ -31,7 +55,10 @@ module Nagi
     end
 
     def ok(message)
-      throw :status, Nagi::Status::OK.new(message)
+      status = Nagi::Status::OK.new(message)
+      throw :status, status unless @collect
+      @collected.push(status)
+      return status
     end
 
     def prefix(prefix)
@@ -43,7 +70,10 @@ module Nagi
     end
 
     def unknown(message)
-      throw :status, Nagi::Status::Unknown.new(message)
+      status = Nagi::Status::Unknown.new(message)
+      throw :status, status unless @collect
+      @collected.push(status)
+      return status
     end
 
     def version(version)
@@ -51,7 +81,10 @@ module Nagi
     end
 
     def warning(message)
-      throw :status, Nagi::Status::Warning.new(message)
+      status = Nagi::Status::Warning.new(message)
+      throw :status, status unless @collect
+      @collected.push(status)
+      return status
     end
   end
 end
