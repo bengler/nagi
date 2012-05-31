@@ -1,0 +1,7 @@
+0.1.1: 2012-05-30
+- Made Utility::execute() work with Ruby 1.8
+- Properly escape quotes in Utility::execute()
+- Fixed syntax errors in README example
+
+0.1.0: 2012-05-18
+- Initial release
