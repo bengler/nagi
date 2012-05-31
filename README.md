@@ -141,7 +141,7 @@ Nagi do
 
   check do |args|
     begin
-      output = execute('df')
+      output = execute 'df'
     rescue StandardError => e
       critical "df failed: #{e.message}", true
     end
