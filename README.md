@@ -181,6 +181,9 @@ These describe the program, and are usually given first, if necessary.
   returning. *type* can be either `:severe` or `:all` - `:severe` will
   return the last, most severe status, and `:all` will use the most severe
   status but join all the status messages together into one.
+* `fallback` *status*, *message*: a default status to return if the check
+  doesn't explicitly return one. *status* can be `:ok`, `:warning`, `:critical`,
+  or `:unknown`.
 
 ### Command-line arguments
 

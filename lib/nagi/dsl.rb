@@ -50,6 +50,16 @@ module Nagi
       return Nagi::Utility.execute(command)
     end
 
+    def fallback(status, message)
+      @plugin.fallback = case status
+        when :ok then Nagi::Status::OK.new(message)
+        when :warning then Nagi::Status::Warning.new(message)
+        when :critical then Nagi::Status::Critical.new(message)
+        when :unknown then Nagi::Status::Unknown.new(message)
+        else raise "Unknown fallback status #{status}"
+      end
+    end
+
     def name(name)
       @plugin.name = name
     end

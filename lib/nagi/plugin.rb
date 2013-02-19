@@ -1,6 +1,6 @@
 module Nagi
   class Plugin
-    attr_accessor :name, :optionparser, :prefix, :version
+    attr_accessor :fallback, :name, :optionparser, :prefix, :version
 
     def initialize
       @optionparser = Nagi::OptionParser.new
@@ -22,8 +22,8 @@ module Nagi
       rescue StandardError => e
         status = Nagi::Status::Unknown.new(e.message)
       end
-      if not status.is_a?Nagi::Status::Status
-        status = Nagi::Status::Unknown.new('Check did not provide a status')
+      unless status.is_a?Nagi::Status::Status
+      status = @fallback || Nagi::Status::Unknown.new('Check did not provide a status')
       end
       return status
     end

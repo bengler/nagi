@@ -5,6 +5,13 @@ describe Nagi::Plugin do
     @plugin = Nagi::Plugin.new
   end
 
+  describe '#fallback' do
+    it 'sets fallback' do
+      @plugin.fallback = 'test'
+      @plugin.fallback.should eq 'test'
+    end
+  end
+
   describe '#optionparser' do
     it 'contains OptionParser' do
       @plugin.optionparser.class.should eq Nagi::OptionParser
@@ -70,10 +77,37 @@ describe Nagi::Plugin do
       @plugin.run([]).class.should eq Nagi::Status::OK
     end
 
+    it 'returns check status even when fallback is set' do
+      @plugin.fallback = Nagi::Status::Unknown.new('Fallback')
+      class << @plugin
+        def check(options)
+          return Nagi::Status::OK.new('ok')
+        end
+      end
+      @plugin.run([]).class.should eq Nagi::Status::OK
+    end
+
+    it 'returns fallback status if set and no other status' do
+      @plugin.fallback = Nagi::Status::OK.new('Fallback')
+      class << @plugin
+        def check(options)
+        end
+      end
+      @plugin.run([]).should eq @plugin.fallback
+    end
+
     it 'returns unknown status on check exception' do
       class << @plugin
         def check(options)
           raise StandardError.new('error')
+        end
+      end
+      @plugin.run([]).class.should eq Nagi::Status::Unknown
+    end
+
+    it 'returns unknown status if no status' do
+      class << @plugin
+        def check(options)
         end
       end
       @plugin.run([]).class.should eq Nagi::Status::Unknown

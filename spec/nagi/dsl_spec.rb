@@ -120,6 +120,18 @@ describe Nagi::DSL do
     end
   end
 
+  describe '.fallback' do
+    it 'sets plugin fallback' do
+      @dsl.fallback(:ok, 'Fallback')
+      @dsl.plugin.fallback.class.should eq Nagi::Status::OK
+      @dsl.plugin.fallback.message.should eq 'Fallback'
+    end
+
+    it 'raises exception on unknown status' do
+      lambda{ @dsl.fallback(:invalid, 'Invalid') }.should raise_error
+    end
+  end
+
   describe '.name' do
     it 'sets plugin name' do
       @dsl.name('name')
