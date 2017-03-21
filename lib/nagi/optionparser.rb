@@ -25,10 +25,10 @@ module Nagi
       self.banner += " <#{name}>"
     end
 
-    def parse!(args)
+    def parse!(args, into: nil)
       begin
         @options.clear
-        super(args)
+        super(args, into: into)
         @arguments.each do |a|
           @options[a] = args.shift or raise ArgumentError.new("Argument '#{a}' not given")
         end
